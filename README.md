@@ -17,3 +17,10 @@
 <p align="center">
   <img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/dance.gif" width="500">
 </p>
+
+
+### Coordinate System
+
+<p align="center">
+  <img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/coordinate system.gif" width="500">
+</p>
