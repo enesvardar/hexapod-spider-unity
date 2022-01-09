@@ -1,4 +1,4 @@
-**# hexapod-spider**
+# Hexapod Robot Simulator 
 
 ## Features
 
