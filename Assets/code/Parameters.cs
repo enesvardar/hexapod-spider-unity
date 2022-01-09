@@ -31,6 +31,7 @@ namespace Assets.code
         public static Vector3 rfEulerAngles = new Vector3(0, 0, -45);// right front
 
         // ContactCenterPoint => ContCntrPnt
+        
         public static Vector3 lbContCntrPnt = new Vector3(-120, 175.5f, 0);
         public static Vector3 lmContCntrPnt = new Vector3(-120, 0, 0);
         public static Vector3 lfContCntrPnt = new Vector3(-120, -175.5f, 0);

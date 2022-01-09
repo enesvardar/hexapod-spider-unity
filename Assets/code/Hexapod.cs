@@ -59,7 +59,7 @@ namespace Assets.code
         public Hexapod()
         {
             hexapod = GameObject.Find("hexapod");
-            
+
             hexapod.transform.localPosition = new UnityEngine.Vector3(0, 0, 54.6007f);
             hexapod.transform.localRotation = UnityEngine.Quaternion.Lerp(hexapod.transform.localRotation, UnityEngine.Quaternion.Euler(new UnityEngine.Vector3(0, 0, 0)), 1);
 
@@ -189,8 +189,6 @@ namespace Assets.code
         public void walking(Direction dir, bool contFlag)
         {
             bool done = false;
-
-            Debug.Log(stepWalk);
 
             switch (stepWalk)
             {
