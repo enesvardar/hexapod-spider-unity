@@ -2,8 +2,6 @@
 
 ## Features
 
-<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/walk.gif" alt="drawing" width="325" align="right" />
-
 🎉 Control
 
 - [x] The robot's dimensions
