@@ -2,10 +2,6 @@
 
 ## Features
 
-🎉 Control
-
-- [x] The robot's 3d orientation, translation, stance, and more
-
 🎉 Solve
 
 - [x] Inverse Kinematics
@@ -13,9 +9,9 @@
 
 🎉 Simulate
 
-- [x] Ripple and tripod gait variations
 - [x] Walking forward and backwards
 - [x] Rotating clockwise and counterclockwise
+- [x] Dancing
 
 ### Walk
 
