@@ -1,4 +1,4 @@
-# hexapod-spider
+**# hexapod-spider**
 
 ## Features
 
