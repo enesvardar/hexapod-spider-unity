@@ -4,7 +4,6 @@
 
 🎉 Control
 
-- [x] The robot's dimensions
 - [x] The robot's 3d orientation, translation, stance, and more
 
 🎉 Solve
