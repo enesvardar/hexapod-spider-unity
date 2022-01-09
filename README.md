@@ -1,5 +1,25 @@
 # hexapod-spider
 
+## Features
+
+<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/walk.gif" alt="drawing" width="325" align="right" />
+
+🎉 Control
+
+- [x] The robot's dimensions
+- [x] The robot's 3d orientation, translation, stance, and more
+
+🎉 Solve
+
+- [x] Inverse Kinematics
+- [x] Forward Kinematics
+
+🎉 Simulate
+
+- [x] Ripple and tripod gait variations
+- [x] Walking forward and backwards
+- [x] Rotating clockwise and counterclockwise
+
 ### Walk
 
 <p align="center">
