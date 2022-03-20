@@ -48,7 +48,7 @@ namespace Assets.code
                     case "beta":
                         this.beta = child;
                         break;
-                    case "gama2":
+                    case "gama":
                         this.gama = child;
                         break;
 
@@ -301,7 +301,7 @@ namespace Assets.code
                 // Dampen towards the target rotation
                 alpha.localRotation = Quaternion.Lerp(alpha.localRotation, Quaternion.Euler(0, 0, alphaAngleDeg), Time.deltaTime * 100);
                 beta.localRotation = Quaternion.Lerp(beta.localRotation, Quaternion.Euler(new Vector3(90, 0, betaAngleDeg)), Time.deltaTime * 100);
-                gama.localRotation = Quaternion.Lerp(gama.localRotation, Quaternion.Euler(new Vector3(-90, 0, gamaAngleDeg)), Time.deltaTime * 100);
+                gama.localRotation = Quaternion.Lerp(gama.localRotation, Quaternion.Euler(new Vector3(0, 0, gamaAngleDeg)), Time.deltaTime * 100);
             }
         }
     }

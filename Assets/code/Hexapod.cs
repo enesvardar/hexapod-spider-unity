@@ -60,17 +60,17 @@ namespace Assets.code
         {
             hexapod = GameObject.Find("hexapod");
 
-            hexapod.transform.localPosition = new UnityEngine.Vector3(0, 0, 54.6007f);
+            hexapod.transform.localPosition = new UnityEngine.Vector3(0, 0, 30);
             hexapod.transform.localRotation = UnityEngine.Quaternion.Lerp(hexapod.transform.localRotation, UnityEngine.Quaternion.Euler(new UnityEngine.Vector3(0, 0, 0)), 1);
 
             joints = new List<Leg>();
 
-            joints.Add(new Leg(GameObject.Find("leftBack"), 70));
-            joints.Add(new Leg(GameObject.Find("leftMiddle"), 70));
-            joints.Add(new Leg(GameObject.Find("leftFront"), 70));
-            joints.Add(new Leg(GameObject.Find("rightBack"), 70));
-            joints.Add(new Leg(GameObject.Find("rightMiddle"), 70));
-            joints.Add(new Leg(GameObject.Find("rightFront"), 70));
+            joints.Add(new Leg(GameObject.Find("leftBack"), -10));
+            joints.Add(new Leg(GameObject.Find("leftMiddle"), -10));
+            joints.Add(new Leg(GameObject.Find("leftFront"), -10));
+            joints.Add(new Leg(GameObject.Find("rightBack"), -10));
+            joints.Add(new Leg(GameObject.Find("rightMiddle"), -10));
+            joints.Add(new Leg(GameObject.Find("rightFront"), -10));
         }
 
         public void moveHexapodBodyDir(float ofset, Direction dir)
@@ -196,21 +196,21 @@ namespace Assets.code
                     stepWalk = contFlag == true ? WalkingStep.start : stepWalk;
                     break;
                 case WalkingStep.start:
-                    done = walkingSpecialStep(dir, group1, 80);
+                    done = walkingSpecialStep(dir, group1, 50);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     break;
                 case WalkingStep.walking1:
-                    done = walkingSpecialStep(dir, group1, 160);
+                    done = walkingSpecialStep(dir, group1, 100);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     if (done == true)
                         stepWalk = contFlag == false ? WalkingStep.stop : stepWalk;
                     break;
                 case WalkingStep.walking2:
-                    done = walkingSpecialStep(dir, group2, 160);
+                    done = walkingSpecialStep(dir, group2, 100);
                     stepWalk = done == true ? WalkingStep.walking1 : stepWalk;
                     break;
                 case WalkingStep.stop:
-                    done = walkingSpecialStep(dir, group2, 80);
+                    done = walkingSpecialStep(dir, group2, 50);
                     stepWalk = done == true ? WalkingStep.sleepy : stepWalk;
                     break;
                 default:
