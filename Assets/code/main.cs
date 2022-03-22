@@ -98,11 +98,11 @@ public class main : MonoBehaviour
             keyFlagD = false;
         }
 
-        Globals.hexapod.walking(direction, walkFlag);
-        Globals.hexapod.rotating(rotateFlag);
-        Globals.hexapod.dancing(danceFlag);
+        Globals.hexapod.Walking(direction, walkFlag);
+        Globals.hexapod.Rotating(rotateFlag);
+        Globals.hexapod.Dancing(danceFlag);
 
         gui.update();
-        Globals.hexapod.update();
+        Globals.hexapod.Update();
     }
 }

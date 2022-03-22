@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.code
 {
-    enum legs : int
+    enum Legs : int
     {
        leftBack = 0,
        leftMiddle = 1,
@@ -122,12 +122,12 @@ namespace Assets.code
             
             legBaseFORG = new Vector3(legBaseFORG.x + _endOfsetX, legBaseFORG.y +_endOfsetY, legBaseFORG.z);
 
-            inverseKinematicsForEndJoint();
+            İnverseKinematicsForEndJoint();
 
-            updateLegBaseFCCP();
+            UpdateLegBaseFCCP();
         }
 
-        public void moveLegBasePoint(float _endOfsetX, float _endOfsetY, float _endOfsetZ)
+        public void MoveLegBasePoint(float _endOfsetX, float _endOfsetY, float _endOfsetZ)
         {
             float endOfsetX = 0;
             float endOfsetY = 0;
@@ -150,27 +150,27 @@ namespace Assets.code
             legBaseFORG = new Vector3(legBaseFORG.x + endOfsetX, legBaseFORG.y + endOfsetY, legBaseFORG.z + _endOfsetZ);
         }
 
-        public void moveLeg(Direction dir)
+        public void MoveLeg(Direction dir)
         {
             switch (dir)
             {
                 case Direction.forward:
-                    moveLegBasePoint(0, 1, 0);
+                    MoveLegBasePoint(0, 1, 0);
                     break;
                 case Direction.back:
-                    moveLegBasePoint(0, -1, 0);
+                    MoveLegBasePoint(0, -1, 0);
                     break;
                 case Direction.up:
-                    moveLegBasePoint(0, 0, 0.2f);
+                    MoveLegBasePoint(0, 0, 0.2f);
                     break;
                 case Direction.down:
-                    moveLegBasePoint(0, 0, -0.2f);
+                    MoveLegBasePoint(0, 0, -0.2f);
                     break;
                 case Direction.left:
-                    moveLegBasePoint(-1, 0, 0);
+                    MoveLegBasePoint(-1, 0, 0);
                     break;
                 case Direction.right:
-                    moveLegBasePoint(+1, 0, 0);
+                    MoveLegBasePoint(+1, 0, 0);
                     break;
                 case Direction.none:
                     break;
@@ -179,14 +179,14 @@ namespace Assets.code
             }
         }
 
-        public void updateLegBaseFORG(float ofsetZ)
+        public void UpdateLegBaseFORG(float ofsetZ)
         {
             Quaternion rotation = Quaternion.Euler(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x,
                 legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z + ofsetZ);
 
             Matrix4x4 T = Matrix4x4.Rotate(rotation);
 
-            Vector3 alphaPosForOrigin = getAlphaPosForOrigin();
+            Vector3 alphaPosForOrigin = GetAlphaPosForOrigin();
         
             T.m03 = alphaPosForOrigin.x;
             T.m13 = alphaPosForOrigin.y;
@@ -199,7 +199,7 @@ namespace Assets.code
             legBaseFORG = new Vector3(temp.x, temp.y, legBaseFORG.z);
         }
 
-        public void updateLegBaseFCCP()
+        public void UpdateLegBaseFCCP()
         {
             float Q1 = alphaAngleRad;
             float Q2 = betaAngleRad;
@@ -212,8 +212,9 @@ namespace Assets.code
             legBaseFCCP = new Vector3(px, py, pz);
         }
 
-        private Vector3 getAlphaPosForOrigin()
+        private Vector3 GetAlphaPosForOrigin()
         {
+
             Vector3 rot = new Vector3(Parameters.bodyLocalEulerAngles.x, Parameters.bodyLocalEulerAngles.y, Parameters.bodyLocalEulerAngles.z);
 
             Quaternion rotation = Quaternion.Euler(rot);
@@ -227,7 +228,7 @@ namespace Assets.code
             return T * new Vector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
         }
 
-        private void inverseKinematicsForEndJoint()
+        private void İnverseKinematicsForEndJoint()
         {
             Quaternion rotation = Quaternion.Euler(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x,
                 legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z);
@@ -235,7 +236,7 @@ namespace Assets.code
 
             Matrix4x4 T = Matrix4x4.Rotate(rotation);
 
-            Vector3 alphaPosForOrigin = getAlphaPosForOrigin();
+            Vector3 alphaPosForOrigin = GetAlphaPosForOrigin();
 
             T.m03 = alphaPosForOrigin.x;
             T.m13 = alphaPosForOrigin.y;
@@ -286,9 +287,9 @@ namespace Assets.code
             }
         }
 
-        public void update()
+        public void Update()
         {
-            inverseKinematicsForEndJoint();
+            İnverseKinematicsForEndJoint();
 
             float alphaAngleDeg = (alphaAngleRad * Mathf.Rad2Deg) % 360;
             float betaAngleDeg = -(betaAngleRad * Mathf.Rad2Deg) % 360;

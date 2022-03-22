@@ -36,7 +36,7 @@ namespace Assets.code
         public const int group2 = 2;
         
         public GameObject hexapod;
-        List<Leg> joints;
+        private readonly List<Leg> joints;
 
         public WalkingStep stepWalk = WalkingStep.sleepy;
         public RotatingStep stepRotate = RotatingStep.sleepy;
@@ -63,17 +63,18 @@ namespace Assets.code
             hexapod.transform.localPosition = new UnityEngine.Vector3(0, 0, 30);
             hexapod.transform.localRotation = UnityEngine.Quaternion.Lerp(hexapod.transform.localRotation, UnityEngine.Quaternion.Euler(new UnityEngine.Vector3(0, 0, 0)), 1);
 
-            joints = new List<Leg>();
-
-            joints.Add(new Leg(GameObject.Find("leftBack"), -10));
-            joints.Add(new Leg(GameObject.Find("leftMiddle"), -10));
-            joints.Add(new Leg(GameObject.Find("leftFront"), -10));
-            joints.Add(new Leg(GameObject.Find("rightBack"), -10));
-            joints.Add(new Leg(GameObject.Find("rightMiddle"), -10));
-            joints.Add(new Leg(GameObject.Find("rightFront"), -10));
+            joints = new List<Leg>
+            {
+                new Leg(GameObject.Find("leftBack"), -10),
+                new Leg(GameObject.Find("leftMiddle"), -10),
+                new Leg(GameObject.Find("leftFront"), -10),
+                new Leg(GameObject.Find("rightBack"), -10),
+                new Leg(GameObject.Find("rightMiddle"), -10),
+                new Leg(GameObject.Find("rightFront"), -10)
+            };
         }
 
-        public void moveHexapodBodyDir(float ofset, Direction dir)
+        public void MoveHexapodBodyDir(float ofset, Direction dir)
         {
             float x = 0;
             float y = 0;
@@ -106,14 +107,14 @@ namespace Assets.code
             Parameters.bodyLocalPosition = new UnityEngine.Vector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z);
         }
 
-        public void moveHexapodBodyXYZ(float x, float y, float z)
+        public void MoveHexapodBodyXYZ(float x, float y, float z)
         {
             hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + x, hexapod.transform.localPosition.y + y, hexapod.transform.localPosition.z + z);
 
             Parameters.bodyLocalPosition = new UnityEngine.Vector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z + z);
         }
 
-        public void rotateHexapodBodyXYZ(float x, float y, float z)
+        public void RotateHexapodBodyXYZ(float x, float y, float z)
         {
             hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(hexapod.transform.localEulerAngles.x + x, hexapod.transform.localEulerAngles.y + y, hexapod.transform.localEulerAngles.z + z);
 
@@ -121,36 +122,36 @@ namespace Assets.code
         }
 
 
-        public void setLocalPositionHexapodBody(UnityEngine.Vector3 value)
+        public void SetLocalPositionHexapodBody(UnityEngine.Vector3 value)
         {
             hexapod.transform.localPosition = value;
 
             Parameters.bodyLocalPosition = value;
         }
 
-        public void setLocalEulerAnglesHexapodBody(UnityEngine.Vector3 value)
+        public void SetLocalEulerAnglesHexapodBody(UnityEngine.Vector3 value)
         {
             hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(value.x, value.y, value.z);
 
             Parameters.bodyLocalEulerAngles = value;
         }
 
-        public void moveLegGroup(int group, int step, Direction dir)
+        public void MoveLegGroup(int group, int step, Direction dir)
         {
             for (int i = 0; i < step; i++)
             {
                 switch (group)
                 {
                     case group1:
-                        joints[(int)(legs.leftBack)].moveLeg(dir);
-                        joints[(int)(legs.rightMiddle)].moveLeg(dir);
-                        joints[(int)(legs.leftFront)].moveLeg(dir);
+                        joints[(int)(Legs.leftBack)].MoveLeg(dir);
+                        joints[(int)(Legs.rightMiddle)].MoveLeg(dir);
+                        joints[(int)(Legs.leftFront)].MoveLeg(dir);
                         break;
 
                     case group2:
-                        joints[(int)(legs.rightBack)].moveLeg(dir);
-                        joints[(int)(legs.leftMiddle)].moveLeg(dir);
-                        joints[(int)(legs.rightFront)].moveLeg(dir);
+                        joints[(int)(Legs.rightBack)].MoveLeg(dir);
+                        joints[(int)(Legs.leftMiddle)].MoveLeg(dir);
+                        joints[(int)(Legs.rightFront)].MoveLeg(dir);
                         break;
 
                     default:
@@ -159,21 +160,21 @@ namespace Assets.code
             }
         }
 
-        public bool walkingSpecialStep(Direction dir, int group, int conditionY)
+        public bool WalkingSpecialStep(Direction dir, int group, int conditionY)
         {
             bool done = false;
 
             if (changePosY < (conditionY / 2))
             {
-                moveLegGroup(group, 1, Direction.up);
+                MoveLegGroup(group, 1, Direction.up);
             }
             else
             {
-                moveLegGroup(group, 1, Direction.down);
+                MoveLegGroup(group, 1, Direction.down);
             }
 
-            moveHexapodBodyDir(1, dir);
-            moveLegGroup(group,2, dir);
+            MoveHexapodBodyDir(1, dir);
+            MoveLegGroup(group,2, dir);
 
             changePosY = changePosY + 1;
 
@@ -186,7 +187,7 @@ namespace Assets.code
             return done;
         }
 
-        public void walking(Direction dir, bool contFlag)
+        public void Walking(Direction dir, bool contFlag)
         {
             bool done = false;
 
@@ -196,21 +197,21 @@ namespace Assets.code
                     stepWalk = contFlag == true ? WalkingStep.start : stepWalk;
                     break;
                 case WalkingStep.start:
-                    done = walkingSpecialStep(dir, group1, 50);
+                    done = WalkingSpecialStep(dir, group1, 50);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     break;
                 case WalkingStep.walking1:
-                    done = walkingSpecialStep(dir, group1, 100);
+                    done = WalkingSpecialStep(dir, group1, 100);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     if (done == true)
                         stepWalk = contFlag == false ? WalkingStep.stop : stepWalk;
                     break;
                 case WalkingStep.walking2:
-                    done = walkingSpecialStep(dir, group2, 100);
+                    done = WalkingSpecialStep(dir, group2, 100);
                     stepWalk = done == true ? WalkingStep.walking1 : stepWalk;
                     break;
                 case WalkingStep.stop:
-                    done = walkingSpecialStep(dir, group2, 50);
+                    done = WalkingSpecialStep(dir, group2, 50);
                     stepWalk = done == true ? WalkingStep.sleepy : stepWalk;
                     break;
                 default:
@@ -218,20 +219,20 @@ namespace Assets.code
             }
         }
 
-        public void rotateLegGroup(int group,float rotateZ)
+        public void RotateLegGroup(int group,float rotateZ)
         {
             switch (group)
             {
                 case group1:
-                    joints[(int)(legs.leftBack)].updateLegBaseFORG(rotateZ);
-                    joints[(int)(legs.rightMiddle)].updateLegBaseFORG(rotateZ);
-                    joints[(int)(legs.leftFront)].updateLegBaseFORG(rotateZ);
+                    joints[(int)(Legs.leftBack)].UpdateLegBaseFORG(rotateZ);
+                    joints[(int)(Legs.rightMiddle)].UpdateLegBaseFORG(rotateZ);
+                    joints[(int)(Legs.leftFront)].UpdateLegBaseFORG(rotateZ);
                     break;
 
                 case group2:
-                    joints[(int)(legs.rightBack)].updateLegBaseFORG(rotateZ);
-                    joints[(int)(legs.leftMiddle)].updateLegBaseFORG(rotateZ);
-                    joints[(int)(legs.rightFront)].updateLegBaseFORG(rotateZ);
+                    joints[(int)(Legs.rightBack)].UpdateLegBaseFORG(rotateZ);
+                    joints[(int)(Legs.leftMiddle)].UpdateLegBaseFORG(rotateZ);
+                    joints[(int)(Legs.rightFront)].UpdateLegBaseFORG(rotateZ);
                     break;
 
                 default:
@@ -239,21 +240,21 @@ namespace Assets.code
             }
         }
 
-        public bool rotatingSpecialStep(int group, float stepZ, float rotateZ, int condZ)
+        public bool RotatingSpecialStep(int group, float stepZ, float rotateZ, int condZ)
         {
             bool done = false;
 
-            rotateHexapodBodyXYZ(0, 0, stepZ);
+            RotateHexapodBodyXYZ(0, 0, stepZ);
 
-            rotateLegGroup(group, rotateZ);
+            RotateLegGroup(group, rotateZ);
 
             if (changeRotateZ <= condZ)
             {
-                moveLegGroup(group, 4, Direction.up);
+                MoveLegGroup(group, 4, Direction.up);
             }
             else
             {
-                moveLegGroup(group, 4, Direction.down);
+                MoveLegGroup(group, 4, Direction.down);
             }
 
             if (changeRotateZ ==  (2 * condZ))
@@ -262,15 +263,15 @@ namespace Assets.code
                 changeRotateZ = 0;
 
                 if (group == group1)
-                    A = (joints[(int)(legs.rightFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
+                    A = (joints[(int)(Legs.rightFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
                 else
-                    A = (joints[(int)(legs.leftFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
+                    A = (joints[(int)(Legs.leftFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
             }
 
             return done;
         }
 
-        public void rotating(bool contFlag)
+        public void Rotating(bool contFlag)
         {
             bool done = false;
 
@@ -281,24 +282,24 @@ namespace Assets.code
                     break;
                 case RotatingStep.start:
                     changeRotateZ = changeRotateZ + 1;
-                    done = rotatingSpecialStep(group1, 1, changeRotateZ, 10);
+                    done = RotatingSpecialStep(group1, 1, changeRotateZ, 10);
                     stepRotate = done == true ? RotatingStep.rotating1 : stepRotate;
                     break;
                 case RotatingStep.rotating1:
                     changeRotateZ = changeRotateZ + 0.5f;
-                    done = rotatingSpecialStep(group2, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
+                    done = RotatingSpecialStep(group2, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
                     stepRotate = done == true ? RotatingStep.rotating2 : stepRotate;
                     break;
                 case RotatingStep.rotating2:
                     changeRotateZ = changeRotateZ + 0.5f;
-                    done = rotatingSpecialStep(group1, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
+                    done = RotatingSpecialStep(group1, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
                     stepRotate = done == true ? RotatingStep.rotating1 : stepRotate;
                     if (done == true)
                         stepRotate = contFlag == false ? RotatingStep.stop : stepRotate;
                     break;
                 case RotatingStep.stop:
                     changeRotateZ = changeRotateZ + 0.5f;
-                    done = rotatingSpecialStep(group2, 0.5f, A + (-A) * changeRotateZ / 10, 5);
+                    done = RotatingSpecialStep(group2, 0.5f, A + (-A) * changeRotateZ / 10, 5);
                     stepRotate = done == true ? RotatingStep.sleepy : stepRotate;
                     break;
                 default:
@@ -308,7 +309,7 @@ namespace Assets.code
             Thread.Sleep(2);
         }
 
-        public void dancing(bool contFlag)
+        public void Dancing(bool contFlag)
         {
             switch (stepDancing)
             {
@@ -324,8 +325,8 @@ namespace Assets.code
                     danceTheta++;
                     danceX = (float)Math.Cos(Mathf.Deg2Rad * danceTheta);
                     danceY = (float)Math.Sin(Mathf.Deg2Rad * danceTheta);
-                    moveHexapodBodyXYZ((danceX - bufDanceX) * 30, (danceY - bufDanceY) * 30, 0);
-                    rotateHexapodBodyXYZ((danceX - bufDanceX) * 5, (danceY - bufDanceY) * 5, 0);
+                    MoveHexapodBodyXYZ((danceX - bufDanceX) * 30, (danceY - bufDanceY) * 30, 0);
+                    RotateHexapodBodyXYZ((danceX - bufDanceX) * 5, (danceY - bufDanceY) * 5, 0);
                     bufDanceX = danceX;
                     bufDanceY = danceY;
                     stepDancing = contFlag == false ? DancingStep.stop : stepDancing;
@@ -341,16 +342,16 @@ namespace Assets.code
                         danceTheta = 0;
                         stepDancing = DancingStep.sleepy;
 
-                        setLocalPositionHexapodBody(bufBodyLocalPosition);
-                        setLocalEulerAnglesHexapodBody(bufBodyLocalEulerAngles);
+                        SetLocalPositionHexapodBody(bufBodyLocalPosition);
+                        SetLocalEulerAnglesHexapodBody(bufBodyLocalEulerAngles);
 
                         bufDanceX = 0;
                         bufDanceY = 0;
                     }
                     else
                     {
-                        moveHexapodBodyXYZ(-difPos.x / 100, -difPos.y / 100, 0);
-                        rotateHexapodBodyXYZ(-difAngle.x / 100, -difAngle.y / 100, 0);
+                        MoveHexapodBodyXYZ(-difPos.x / 100, -difPos.y / 100, 0);
+                        RotateHexapodBodyXYZ(-difAngle.x / 100, -difAngle.y / 100, 0);
                     }
 
                     break;
@@ -358,11 +359,11 @@ namespace Assets.code
                     break;
             }
         }
-        public void update()
+        public void Update()
         {
             foreach (var joint in joints)
             {
-                joint.update();
+                joint.Update();
             }
         }
     }

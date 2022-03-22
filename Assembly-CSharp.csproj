@@ -60,6 +60,7 @@
     <Compile Include="Assets\code\Parameters.cs" />
     <Compile Include="Assets\code\camera.cs" />
     <Compile Include="Assets\code\Leg.cs" />
+    <Compile Include="Assets\code\MyMath.cs" />
     <Compile Include="Assets\code\Hexapod.cs" />
     <Compile Include="Assets\code\main.cs" />
     <Compile Include="Assets\code\Gui.cs" />

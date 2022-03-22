@@ -82,7 +82,7 @@ namespace Assets.code
                 float change = (txScroolbar.value - txScroolbarBuf) * 100 ;
                 tx = txScroolbar.value - 0.5f;
                 txText.text = "tx = " + tx.ToString();
-                Globals.hexapod.moveHexapodBodyXYZ(change, 0, 0);
+                Globals.hexapod.MoveHexapodBodyXYZ(change, 0, 0);
                 txScroolbarBuf = txScroolbar.value;
             }
 
@@ -91,7 +91,7 @@ namespace Assets.code
                 float change = (tyScroolbar.value - tyScroolbarBuf) * 100;
                 ty = tyScroolbar.value - 0.5f;
                 tyText.text = "ty = " + ty.ToString();
-                Globals.hexapod.moveHexapodBodyXYZ(0, change, 0);
+                Globals.hexapod.MoveHexapodBodyXYZ(0, change, 0);
                 tyScroolbarBuf = tyScroolbar.value;
             }
 
@@ -100,7 +100,7 @@ namespace Assets.code
                 float change = (tzScroolbar.value - tzScroolbarBuf) * 100;
                 tz = tzScroolbar.value - 0.5f;
                 tzText.text = "tz = " + tz.ToString();
-                Globals.hexapod.moveHexapodBodyXYZ(0, 0, change);
+                Globals.hexapod.MoveHexapodBodyXYZ(0, 0, change);
                 tzScroolbarBuf = tzScroolbar.value;
             }
 
@@ -109,7 +109,7 @@ namespace Assets.code
                 float change = (rxScroolbar.value - rxScroolbarBuf)*80;
                 rx = rxScroolbar.value - 0.5f;
                 rxText.text = "rx = " + rx.ToString();
-                Globals.hexapod.rotateHexapodBodyXYZ(change, 0, 0);
+                Globals.hexapod.RotateHexapodBodyXYZ(change, 0, 0);
                 rxScroolbarBuf = rxScroolbar.value;
             }
 
@@ -118,7 +118,7 @@ namespace Assets.code
                 float change = (ryScroolbar.value - ryScroolbarBuf) * 80;
                 ry = ryScroolbar.value - 0.5f;
                 ryText.text = "ry = " + ry.ToString();
-                Globals.hexapod.rotateHexapodBodyXYZ(0, change, 0);
+                Globals.hexapod.RotateHexapodBodyXYZ(0, change, 0);
                 ryScroolbarBuf = ryScroolbar.value;
             }
 
@@ -127,7 +127,7 @@ namespace Assets.code
                 float change = (rzScroolbar.value - rzScroolbarBuf) * 80;
                 rz = rzScroolbar.value - 0.5f;
                 rzText.text = "rz = " + rz.ToString();
-                Globals.hexapod.rotateHexapodBodyXYZ(0, 0, change);
+                Globals.hexapod.RotateHexapodBodyXYZ(0, 0, change);
                 rzScroolbarBuf = rzScroolbar.value;
             }
         }
