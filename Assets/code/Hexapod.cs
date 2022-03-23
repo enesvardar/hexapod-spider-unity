@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Vector3 = System.Numerics.Vector3;
 
 namespace Assets.code
 {
@@ -53,8 +52,8 @@ namespace Assets.code
         public float bufDanceX = 0;
         public float bufDanceY = 0;
         
-        public UnityEngine.Vector3 bufBodyLocalPosition;
-        public UnityEngine.Vector3 bufBodyLocalEulerAngles;
+        public MyVector3 bufBodyLocalPosition;
+        public MyVector3 bufBodyLocalEulerAngles;
 
         public Hexapod()
         {
@@ -103,33 +102,34 @@ namespace Assets.code
             }
 
             hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + x, hexapod.transform.localPosition.y + y, hexapod.transform.localPosition.z);
-
-            Parameters.bodyLocalPosition = new UnityEngine.Vector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z);
+            
+            Parameters.bodyLocalPosition = new MyVector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z);
         }
 
         public void MoveHexapodBodyXYZ(float x, float y, float z)
         {
             hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + x, hexapod.transform.localPosition.y + y, hexapod.transform.localPosition.z + z);
 
-            Parameters.bodyLocalPosition = new UnityEngine.Vector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z + z);
+            Parameters.bodyLocalPosition = new MyVector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z + z);
         }
 
         public void RotateHexapodBodyXYZ(float x, float y, float z)
         {
             hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(hexapod.transform.localEulerAngles.x + x, hexapod.transform.localEulerAngles.y + y, hexapod.transform.localEulerAngles.z + z);
 
-            Parameters.bodyLocalEulerAngles = new UnityEngine.Vector3(Parameters.bodyLocalEulerAngles.x + x, Parameters.bodyLocalEulerAngles.y + y, Parameters.bodyLocalEulerAngles.z + z);
+            Parameters.bodyLocalEulerAngles = new MyVector3(Parameters.bodyLocalEulerAngles.x + x, Parameters.bodyLocalEulerAngles.y + y, Parameters.bodyLocalEulerAngles.z + z);
         }
 
 
-        public void SetLocalPositionHexapodBody(UnityEngine.Vector3 value)
+        public void SetLocalPositionHexapodBody(MyVector3 value)
         {
-            hexapod.transform.localPosition = value;
+            
+            hexapod.transform.localPosition = new UnityEngine.Vector3(value.x, value.y, value.z); 
 
             Parameters.bodyLocalPosition = value;
         }
 
-        public void SetLocalEulerAnglesHexapodBody(UnityEngine.Vector3 value)
+        public void SetLocalEulerAnglesHexapodBody(MyVector3 value)
         {
             hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(value.x, value.y, value.z);
 
@@ -334,8 +334,8 @@ namespace Assets.code
                     break;
                 case DancingStep.stop:
 
-                    UnityEngine.Vector3 difPos = Parameters.bodyLocalPosition - bufBodyLocalPosition;
-                    UnityEngine.Vector3 difAngle = Parameters.bodyLocalEulerAngles - bufBodyLocalEulerAngles;
+                    MyVector3 difPos = Parameters.bodyLocalPosition - bufBodyLocalPosition;
+                    MyVector3 difAngle = Parameters.bodyLocalEulerAngles - bufBodyLocalEulerAngles;
 
                     if (Math.Abs(difPos.x) < 1 && Math.Abs(difAngle.x) < 1)
                     {

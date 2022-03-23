@@ -24,10 +24,10 @@ namespace Assets.code
         public Transform beta;
         public Transform gama;
 
-        public Vector3 legBaseFORG;
-        public Vector3 legBaseFCCP;
-        public Vector3 legCCP;
-        public Vector3 legLocalEulerAngles;
+        public MyVector3 legBaseFORG;
+        public MyVector3 legBaseFCCP;
+        public MyVector3 legCCP;
+        public MyVector3 legLocalEulerAngles;
 
         public float alphaAngleRad = 0;
         public float betaAngleRad = 0;
@@ -111,16 +111,16 @@ namespace Assets.code
 
             if(Convert.ToInt32(legBaseFORG.y) < 0)
             {
-                _endOfsetX = _endOfsetX/2;
+                _endOfsetX /= 2;
                 _endOfsetY = _endOfset/2;
             }
             else if(Convert.ToInt32(legBaseFORG.y) > 0)
             {
-                _endOfsetX = _endOfsetX / 2;
+                _endOfsetX /= 2;
                 _endOfsetY = (_endOfset / 2) * -1;
             }
             
-            legBaseFORG = new Vector3(legBaseFORG.x + _endOfsetX, legBaseFORG.y +_endOfsetY, legBaseFORG.z);
+            legBaseFORG = new MyVector3(legBaseFORG.x + _endOfsetX, legBaseFORG.y +_endOfsetY, legBaseFORG.z);
 
             İnverseKinematicsForEndJoint();
 
@@ -147,7 +147,7 @@ namespace Assets.code
             }
 
 
-            legBaseFORG = new Vector3(legBaseFORG.x + endOfsetX, legBaseFORG.y + endOfsetY, legBaseFORG.z + _endOfsetZ);
+            legBaseFORG = new MyVector3(legBaseFORG.x + endOfsetX, legBaseFORG.y + endOfsetY, legBaseFORG.z + _endOfsetZ);
         }
 
         public void MoveLeg(Direction dir)
@@ -181,22 +181,24 @@ namespace Assets.code
 
         public void UpdateLegBaseFORG(float ofsetZ)
         {
-            Quaternion rotation = Quaternion.Euler(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x,
-                legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z + ofsetZ);
+            MyQuaternion rotation = new MyQuaternion();
+            rotation.EulertoQuaternion(new MyVector3(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x, legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z + ofsetZ));
 
-            Matrix4x4 T = Matrix4x4.Rotate(rotation);
+            MyMatrix4x4 T = new MyMatrix4x4();
 
-            Vector3 alphaPosForOrigin = GetAlphaPosForOrigin();
-        
+            T.Rotate(rotation);
+
+            MyVector4 alphaPosForOrigin = GetAlphaPosForOrigin();
+
             T.m03 = alphaPosForOrigin.x;
             T.m13 = alphaPosForOrigin.y;
             T.m23 = alphaPosForOrigin.z;
 
-            Vector4 temp = new Vector4();
+            MyVector4 trans = new MyVector4();
 
-            temp = T * new Vector4(legBaseFCCP.x, legBaseFCCP.y, legBaseFCCP.z, 1.0f);
+            trans = T * new MyVector4(legBaseFCCP.x, legBaseFCCP.y, legBaseFCCP.z, 1.0f);
 
-            legBaseFORG = new Vector3(temp.x, temp.y, legBaseFORG.z);
+            legBaseFORG = new MyVector3(trans.x, trans.y, legBaseFORG.z);
         }
 
         public void UpdateLegBaseFCCP()
@@ -209,42 +211,46 @@ namespace Assets.code
             float py = (float)(Mathf.Sin(Q1) * (Parameters.coxia + Parameters.femuarX * Mathf.Cos(Q2 + Q3) - 1.0 * Parameters.femuarH * Mathf.Sin(Q2 + Q3) + Parameters.tibiaX * Mathf.Cos(Q2) - Parameters.tibiaH * Mathf.Sin(Q2)));
             float pz = -Parameters.femuarH * Mathf.Cos(Q2 + Q3) - Parameters.femuarX * Mathf.Sin(Q2 + Q3) - Parameters.tibiaH * Mathf.Cos(Q2) - Parameters.tibiaX * Mathf.Sin(Q2);
 
-            legBaseFCCP = new Vector3(px, py, pz);
+            legBaseFCCP = new MyVector3(px, py, pz);
         }
 
-        private Vector3 GetAlphaPosForOrigin()
+        private MyVector4 GetAlphaPosForOrigin()
         {
 
-            Vector3 rot = new Vector3(Parameters.bodyLocalEulerAngles.x, Parameters.bodyLocalEulerAngles.y, Parameters.bodyLocalEulerAngles.z);
+            MyQuaternion rotation = new MyQuaternion();
+            rotation.EulertoQuaternion(new MyVector3(Parameters.bodyLocalEulerAngles.x, Parameters.bodyLocalEulerAngles.y, Parameters.bodyLocalEulerAngles.z));
 
-            Quaternion rotation = Quaternion.Euler(rot);
+            MyMatrix4x4 T = new MyMatrix4x4();
 
-            Matrix4x4 T = Matrix4x4.Rotate(rotation);
+            T.Rotate(rotation);
 
             T.m03 = Parameters.bodyLocalPosition.x;
             T.m13 = Parameters.bodyLocalPosition.y;
             T.m23 = Parameters.bodyLocalPosition.z;
 
-            return T * new Vector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
+            return T * new MyVector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
         }
 
         private void İnverseKinematicsForEndJoint()
         {
-            Quaternion rotation = Quaternion.Euler(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x,
-                legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z);
 
+            MyQuaternion rotation = new MyQuaternion();
+            rotation.EulertoQuaternion(new MyVector3(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x,
+            legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z));
 
-            Matrix4x4 T = Matrix4x4.Rotate(rotation);
+            MyMatrix4x4 T = new MyMatrix4x4();
 
-            Vector3 alphaPosForOrigin = GetAlphaPosForOrigin();
+            T.Rotate(rotation);
+
+            MyVector4 alphaPosForOrigin = GetAlphaPosForOrigin();
 
             T.m03 = alphaPosForOrigin.x;
             T.m13 = alphaPosForOrigin.y;
             T.m23 = alphaPosForOrigin.z;
 
-            T = T.inverse;
+            T.Inverse();
 
-            Vector4 P = T * new Vector4(legBaseFORG.x, legBaseFORG.y, legBaseFORG.z, 1.0f);
+            MyVector4 P = T * new MyVector4(legBaseFORG.x, legBaseFORG.y, legBaseFORG.z, 1.0f);
 
             alphaAngleRad = Mathf.Atan2(P.y, P.x);
 
