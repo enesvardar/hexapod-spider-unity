@@ -19,6 +19,7 @@ In this project, an eighteen-jointed hexapod robot was simulated in Unity enviro
 🎉 Simulate
 
 - [x] Walking forward and backwards
+- [x] Walking right and left
 - [x] Rotating clockwise and counterclockwise
 - [x] Dancing
 
