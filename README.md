@@ -22,4 +22,8 @@ In this project, an eighteen-jointed hexapod robot was simulated in Unity enviro
 - [x] Rotating clockwise and counterclockwise
 - [x] Dancing
 
+## Requirements
+
+- [x] Unity 2020.3.12f1 
+
 
