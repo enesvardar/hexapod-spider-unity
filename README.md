@@ -1,10 +1,12 @@
 # Hexapod Robot Simulator 
 
-In this project, an eighteen-jointed hexapod robot was simulated in Unity environment. You can use this app to simulate the walks of a hexapod robot and more.This app is not affiliated with any external math library. 
-
 <img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/walk.gif" width="500"/>|<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/rotation.gif" width="500"/>
 
 <img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/dance.gif" width="500"/>|<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/coordinate system.gif" width="500"/>
+
+# Announcement
+
+In this project, an eighteen-jointed hexapod robot was simulated in Unity environment. You can use this app to simulate the walks of a hexapod robot and more.This app is not affiliated with any external math library. 
 
 ## Features
 
