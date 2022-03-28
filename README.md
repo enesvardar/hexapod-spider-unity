@@ -36,4 +36,7 @@ In this project, an eighteen-jointed hexapod robot was simulated in Unity enviro
 
 - [x] Unity 2020.3.12f1 
 
+## Screenshots
+
+<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/spider.png" width="500"/>
 
