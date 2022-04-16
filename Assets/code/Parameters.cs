@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEngine;
 
 namespace Assets.code
 {
@@ -25,7 +19,7 @@ namespace Assets.code
         public static MyVector3 lbEulerAngles = new MyVector3(0, 0, 120);// left back
         public static MyVector3 lmEulerAngles = new MyVector3(0, 0, 180);// left middle
         public static MyVector3 lfEulerAngles = new MyVector3(0, 0, 240);// left front
-        public static MyVector3 rbEulerAngles = new MyVector3(0, 0, 60);// right back
+        public static MyVector3 rbEulerAngles = new MyVector3(0, 0, 60); // right back
         public static MyVector3 rmEulerAngles = new MyVector3(0, 0, 360);// right middle
         public static MyVector3 rfEulerAngles = new MyVector3(0, 0, 300);// right front
 

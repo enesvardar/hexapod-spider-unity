@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.code
@@ -193,10 +189,8 @@ namespace Assets.code
             T.m03 = alphaPosForOrigin.x;
             T.m13 = alphaPosForOrigin.y;
             T.m23 = alphaPosForOrigin.z;
-
-            MyVector4 trans = new MyVector4();
-
-            trans = T * new MyVector4(legBaseFCCP.x, legBaseFCCP.y, legBaseFCCP.z, 1.0f);
+            
+            MyVector4 trans = T * new MyVector4(legBaseFCCP.x, legBaseFCCP.y, legBaseFCCP.z, 1.0f);
 
             legBaseFORG = new MyVector3(trans.x, trans.y, legBaseFORG.z);
         }
@@ -227,6 +221,8 @@ namespace Assets.code
             T.m03 = Parameters.bodyLocalPosition.x;
             T.m13 = Parameters.bodyLocalPosition.y;
             T.m23 = Parameters.bodyLocalPosition.z;
+
+            MyVector4 k = T * new MyVector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
 
             return T * new MyVector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
         }

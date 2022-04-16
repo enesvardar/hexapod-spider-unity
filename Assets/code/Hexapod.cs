@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.code
@@ -82,7 +78,7 @@ namespace Assets.code
             {
                 if (dir == Direction.back)
                 {
-                    ofset = ofset * -1;
+                    ofset *= -1;
                 }
 
                 x = -Mathf.Sin(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * ofset;
@@ -93,7 +89,7 @@ namespace Assets.code
             {
                 if (dir == Direction.left)
                 {
-                    ofset = ofset * -1;
+                    ofset *= -1;
                 }
 
                 x = Mathf.Cos(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * ofset;
@@ -123,7 +119,6 @@ namespace Assets.code
 
         public void SetLocalPositionHexapodBody(MyVector3 value)
         {
-            
             hexapod.transform.localPosition = new UnityEngine.Vector3(value.x, value.y, value.z); 
 
             Parameters.bodyLocalPosition = value;
@@ -176,7 +171,7 @@ namespace Assets.code
             MoveHexapodBodyDir(1, dir);
             MoveLegGroup(group,2, dir);
 
-            changePosY = changePosY + 1;
+            changePosY++;
 
             if (changePosY == conditionY)
             {
