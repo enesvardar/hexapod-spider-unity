@@ -9,7 +9,6 @@
             <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/coordinate system.gif" width="500"/></td>
         </tr>
         
-    </body>
 </table>
 
 
