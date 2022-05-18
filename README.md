@@ -1,6 +1,5 @@
 # Hexapod Robot Simulator 
 <table border="1">
-    <body>
         <tr>
             <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/walk.gif" width="500"/></td>
             <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/rotation1.gif" width="500"/></td>
