@@ -6,33 +6,35 @@ using UnityEngine;
 namespace Assets.code
 {
 
-    //   (leftFront) (rightFront)
-    //v2          v1
-    //           \   head  /
-    //            *---*---*
-    //           /    |    \
-    // (left    /     |     \
-    // Middle) /      |      \
-    //   v3 --*------cog------*-- v0(rightMiddle)
-    //         \      |      /
-    //          \     |     /
-    //           \    |    /
-    //            *---*---*
-    //           /         \
-    //         v4 v5
-    //      (leftBack)   (rightBack)
+    //        (leftFront)       (rightFront)
+    //               
+    //                \   head  /
+    //                 *---*---*
+    //                /    |    \
+    //               /     |     \
+    //              /      |      \
+    // leftMiddle --*------cog------*-- (rightMiddle)
+    //              \      |      /
+    //               \     |     /
+    //                \    |    /
+    //                 *---*---*
+    //                /         \
+    //              
+    //           (leftBack)   (rightBack)
 
-    //   leftBack,rightMiddle,leftFront == > grup1
-    //   rightBack,leftMiddle,rightFront == > grup2
+    //   leftBack,rightMiddle,leftFront == > LEG_GROUP.firstly
+    //   rightBack,leftMiddle,rightFront == > LEG_GROUP.secondly
 
     class Hexapod
     {
-        public const int group1 = 1;
-        public const int group2 = 2;
-        
-        public GameObject hexapod;
-        private readonly List<Leg> joints;
+        public GameObject hexapod; // robot objesi
 
+        public MyVector3 bufBodyLocalPosition; // gövdesinin origine göre pozisyonunu tutan buffer
+        public MyVector3 bufBodyLocalEulerAngles; // gövdesinin origine göre açısal farkını tutan buffer
+
+        private readonly List<Leg> legs; // robota bağlı 6 bacağı tutan liste
+
+        // yürüme, dönme ve dans adımlarını tutan değişkenler
         public WalkingStep stepWalk = WalkingStep.sleepy;
         public RotatingStep stepRotate = RotatingStep.sleepy;
         public DancingStep stepDancing = DancingStep.sleepy;
@@ -48,24 +50,21 @@ namespace Assets.code
         public float bufDanceX = 0;
         public float bufDanceY = 0;
         
-        public MyVector3 bufBodyLocalPosition;
-        public MyVector3 bufBodyLocalEulerAngles;
-
         public Hexapod()
         {
             hexapod = GameObject.Find("hexapod");
 
-            hexapod.transform.localPosition = new UnityEngine.Vector3(0, 0, 30);
+            hexapod.transform.localPosition = new UnityEngine.Vector3(0, 0, Parameters.bodyLocalPosition.z);
             hexapod.transform.localRotation = UnityEngine.Quaternion.Lerp(hexapod.transform.localRotation, UnityEngine.Quaternion.Euler(new UnityEngine.Vector3(0, 0, 0)), 1);
 
-            joints = new List<Leg>
+            legs = new List<Leg>
             {
-                new Leg(GameObject.Find("leftBack"), -10),
-                new Leg(GameObject.Find("leftMiddle"), -10),
-                new Leg(GameObject.Find("leftFront"), -10),
-                new Leg(GameObject.Find("rightBack"), -10),
-                new Leg(GameObject.Find("rightMiddle"), -10),
-                new Leg(GameObject.Find("rightFront"), -10)
+                new Leg(GameObject.Find("leftBack"), Parameters.endOfset),
+                new Leg(GameObject.Find("leftMiddle"), Parameters.endOfset),
+                new Leg(GameObject.Find("leftFront"), Parameters.endOfset),
+                new Leg(GameObject.Find("rightBack"), Parameters.endOfset),
+                new Leg(GameObject.Find("rightMiddle"), Parameters.endOfset),
+                new Leg(GameObject.Find("rightFront"), Parameters.endOfset)
             };
         }
 
@@ -137,16 +136,16 @@ namespace Assets.code
             {
                 switch (group)
                 {
-                    case group1:
-                        joints[(int)(Legs.leftBack)].MoveDirLegBasePoint(dir);
-                        joints[(int)(Legs.rightMiddle)].MoveDirLegBasePoint(dir);
-                        joints[(int)(Legs.leftFront)].MoveDirLegBasePoint(dir);
+                    case (int)LEG_GROUP.firstly:
+                        legs[(int)(LEG_NAME.leftBack)].MoveDirLegBasePoint(dir);
+                        legs[(int)(LEG_NAME.rightMiddle)].MoveDirLegBasePoint(dir);
+                        legs[(int)(LEG_NAME.leftFront)].MoveDirLegBasePoint(dir);
                         break;
 
-                    case group2:
-                        joints[(int)(Legs.rightBack)].MoveDirLegBasePoint(dir);
-                        joints[(int)(Legs.leftMiddle)].MoveDirLegBasePoint(dir);
-                        joints[(int)(Legs.rightFront)].MoveDirLegBasePoint(dir);
+                    case (int)LEG_GROUP.secondly:
+                        legs[(int)(LEG_NAME.rightBack)].MoveDirLegBasePoint(dir);
+                        legs[(int)(LEG_NAME.leftMiddle)].MoveDirLegBasePoint(dir);
+                        legs[(int)(LEG_NAME.rightFront)].MoveDirLegBasePoint(dir);
                         break;
 
                     default:
@@ -192,21 +191,21 @@ namespace Assets.code
                     stepWalk = contFlag == true ? WalkingStep.start : stepWalk;
                     break;
                 case WalkingStep.start:
-                    done = WalkingSpecialStep(dir, group1, 50);
+                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.firstly, 50);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     break;
                 case WalkingStep.walking1:
-                    done = WalkingSpecialStep(dir, group1, 100);
+                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.firstly, 100);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     if (done == true)
                         stepWalk = contFlag == false ? WalkingStep.stop : stepWalk;
                     break;
                 case WalkingStep.walking2:
-                    done = WalkingSpecialStep(dir, group2, 100);
+                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.secondly, 100);
                     stepWalk = done == true ? WalkingStep.walking1 : stepWalk;
                     break;
                 case WalkingStep.stop:
-                    done = WalkingSpecialStep(dir, group2, 50);
+                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.secondly, 50);
                     stepWalk = done == true ? WalkingStep.sleepy : stepWalk;
                     break;
                 default:
@@ -218,16 +217,16 @@ namespace Assets.code
         {
             switch (group)
             {
-                case group1:
-                    joints[(int)(Legs.leftBack)].UpdateLegBaseFORG(rotateZ);
-                    joints[(int)(Legs.rightMiddle)].UpdateLegBaseFORG(rotateZ);
-                    joints[(int)(Legs.leftFront)].UpdateLegBaseFORG(rotateZ);
+                case (int)LEG_GROUP.firstly:
+                    legs[(int)(LEG_NAME.leftBack)].UpdateLegBaseFORG(rotateZ);
+                    legs[(int)(LEG_NAME.rightMiddle)].UpdateLegBaseFORG(rotateZ);
+                    legs[(int)(LEG_NAME.leftFront)].UpdateLegBaseFORG(rotateZ);
                     break;
 
-                case group2:
-                    joints[(int)(Legs.rightBack)].UpdateLegBaseFORG(rotateZ);
-                    joints[(int)(Legs.leftMiddle)].UpdateLegBaseFORG(rotateZ);
-                    joints[(int)(Legs.rightFront)].UpdateLegBaseFORG(rotateZ);
+                case (int)LEG_GROUP.secondly:
+                    legs[(int)(LEG_NAME.rightBack)].UpdateLegBaseFORG(rotateZ);
+                    legs[(int)(LEG_NAME.leftMiddle)].UpdateLegBaseFORG(rotateZ);
+                    legs[(int)(LEG_NAME.rightFront)].UpdateLegBaseFORG(rotateZ);
                     break;
 
                 default:
@@ -257,10 +256,10 @@ namespace Assets.code
                 done = true;
                 changeRotateZ = 0;
 
-                if (group == group1)
-                    A = (joints[(int)(Legs.rightFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
+                if (group == (int)LEG_GROUP.firstly)
+                    A = (legs[(int)(LEG_NAME.rightFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
                 else
-                    A = (joints[(int)(Legs.leftFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
+                    A = (legs[(int)(LEG_NAME.leftFront)].alphaAngleRad * Mathf.Rad2Deg % 360);
             }
 
             return done;
@@ -277,24 +276,24 @@ namespace Assets.code
                     break;
                 case RotatingStep.start:
                     changeRotateZ = changeRotateZ + 1;
-                    done = RotatingSpecialStep(group1, 1, changeRotateZ, 10);
+                    done = RotatingSpecialStep((int)LEG_GROUP.firstly, 1, changeRotateZ, 10);
                     stepRotate = done == true ? RotatingStep.rotating1 : stepRotate;
                     break;
                 case RotatingStep.rotating1:
                     changeRotateZ = changeRotateZ + 0.5f;
-                    done = RotatingSpecialStep(group2, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
+                    done = RotatingSpecialStep((int)LEG_GROUP.secondly, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
                     stepRotate = done == true ? RotatingStep.rotating2 : stepRotate;
                     break;
                 case RotatingStep.rotating2:
                     changeRotateZ = changeRotateZ + 0.5f;
-                    done = RotatingSpecialStep(group1, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
+                    done = RotatingSpecialStep((int)LEG_GROUP.firstly, 0.5f, A + (20 - A) * changeRotateZ / 20, 10);
                     stepRotate = done == true ? RotatingStep.rotating1 : stepRotate;
                     if (done == true)
                         stepRotate = contFlag == false ? RotatingStep.stop : stepRotate;
                     break;
                 case RotatingStep.stop:
                     changeRotateZ = changeRotateZ + 0.5f;
-                    done = RotatingSpecialStep(group2, 0.5f, A + (-A) * changeRotateZ / 10, 5);
+                    done = RotatingSpecialStep((int)LEG_GROUP.secondly, 0.5f, A + (-A) * changeRotateZ / 10, 5);
                     stepRotate = done == true ? RotatingStep.sleepy : stepRotate;
                     break;
                 default:
@@ -356,7 +355,7 @@ namespace Assets.code
         }
         public void Update()
         {
-            foreach (var joint in joints)
+            foreach (var joint in legs)
             {
                 joint.Update();
             }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.code
 {
-    enum Legs : int
+    enum LEG_NAME : int
     {
        leftBack = 0,
        leftMiddle = 1,
@@ -13,10 +13,14 @@ namespace Assets.code
        rightFront = 5,
     }
 
+    enum LEG_GROUP : int
+    {
+        firstly = 1,
+        secondly = 2,
+    }
+
     class Leg
     {
-        public string name; // her bir bacağın isminin tutulduğu değişken (leftBack,leftMiddle....rightFront)
-
         public Transform alpha; // alpha açısının değiştirildiği eklem
         public Transform beta; // beta açısının değiştirildiği eklem
         public Transform gama; // gama açısının değiştirildiği eklem
@@ -29,6 +33,8 @@ namespace Assets.code
         public float alphaAngleRad = 0; // alpha açısının radyan değeri
         public float betaAngleRad = 0; // beta açısının radyan değeri
         public float gamaAngleRad = 0; // gama açısının radyan değeri
+
+        public string name; // her bir bacağın isminin tutulduğu değişken (leftBack,leftMiddle....rightFront)
 
         public Leg(GameObject leg, float _endOfset)
         {

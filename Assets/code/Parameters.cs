@@ -11,6 +11,8 @@ namespace Assets.code
         public static float femuarX = 0;
         public static float femuarH = 92.00085f;
 
+        public static float endOfset = -10;
+
         public static MyVector3 bodyLocalEulerAngles = new MyVector3(0, 0, 0);
         public static MyVector3 bodyLocalPosition = new MyVector3(0, 0, (femuarH + tibiaH)/2);
 
