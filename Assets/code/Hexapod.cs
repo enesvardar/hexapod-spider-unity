@@ -138,15 +138,15 @@ namespace Assets.code
                 switch (group)
                 {
                     case group1:
-                        joints[(int)(Legs.leftBack)].MoveLeg(dir);
-                        joints[(int)(Legs.rightMiddle)].MoveLeg(dir);
-                        joints[(int)(Legs.leftFront)].MoveLeg(dir);
+                        joints[(int)(Legs.leftBack)].MoveDirLegBasePoint(dir);
+                        joints[(int)(Legs.rightMiddle)].MoveDirLegBasePoint(dir);
+                        joints[(int)(Legs.leftFront)].MoveDirLegBasePoint(dir);
                         break;
 
                     case group2:
-                        joints[(int)(Legs.rightBack)].MoveLeg(dir);
-                        joints[(int)(Legs.leftMiddle)].MoveLeg(dir);
-                        joints[(int)(Legs.rightFront)].MoveLeg(dir);
+                        joints[(int)(Legs.rightBack)].MoveDirLegBasePoint(dir);
+                        joints[(int)(Legs.leftMiddle)].MoveDirLegBasePoint(dir);
+                        joints[(int)(Legs.rightFront)].MoveDirLegBasePoint(dir);
                         break;
 
                     default:

@@ -15,25 +15,27 @@ namespace Assets.code
 
     class Leg
     {
-        public string name;
-        public Transform alpha;
-        public Transform beta;
-        public Transform gama;
+        public string name; // her bir bacağın isminin tutulduğu değişken (leftBack,leftMiddle....rightFront)
 
-        public MyVector3 legBaseFORG;
-        public MyVector3 legBaseFCCP;
-        public MyVector3 legCCP;
-        public MyVector3 legLocalEulerAngles;
+        public Transform alpha; // alpha açısının değiştirildiği eklem
+        public Transform beta; // beta açısının değiştirildiği eklem
+        public Transform gama; // gama açısının değiştirildiği eklem
 
-        public float alphaAngleRad = 0;
-        public float betaAngleRad = 0;
-        public float gamaAngleRad = 0;
+        public MyVector3 legBaseFORG; // bacak tabanın orgindeki kordinat sistemine göre pozisyonu
+        public MyVector3 legBaseFCCP; // bacak tabanın bacağın gövdeye bağlandığı yerdeki kordinat sistemine göre pozisyonu
+        public MyVector3 legCCP; // bacağın gövdeye bağlandığı noktadaki kordinat sistemininin, gövdedeki kordinat sitemine göre pozisyonu
+        public MyVector3 legLocalEulerAngles; // bacağın gövdeye bağlandığı noktadaki kordinat sistemininin, gövdedeki kordinat sitemine göre açısal konumu
+
+        public float alphaAngleRad = 0; // alpha açısının radyan değeri
+        public float betaAngleRad = 0; // beta açısının radyan değeri
+        public float gamaAngleRad = 0; // gama açısının radyan değeri
 
         public Leg(GameObject leg, float _endOfset)
         {
             
             Transform[] allChildren = leg.GetComponentsInChildren<Transform>();
 
+            // bacağın sahip olduğu objelerden açısal kontrollerin yapıldığı objeler bulunuyor
             foreach (Transform child in allChildren)
             {
                 switch (child.name)
@@ -53,8 +55,10 @@ namespace Assets.code
                 }
             }
 
+            // bacağın ismi okunuyor
             name = leg.name;
 
+            // parametreden her bacağın parametreleri okuyor
             switch (name)
             {
                 
@@ -93,10 +97,12 @@ namespace Assets.code
                     break;
             }
 
+            // her bir bacağın ayak tabanı _endOfset değerine göre bir ofset kadar kaydırlıyor
+
             float _endOfsetX = 0;
             float _endOfsetY = 0;
 
-            if (Convert.ToInt32(legBaseFORG.x) > 0)
+            if(Convert.ToInt32(legBaseFORG.x) > 0)
             {
                 _endOfsetX = _endOfset * -1;
             }
@@ -118,84 +124,13 @@ namespace Assets.code
             
             legBaseFORG = new MyVector3(legBaseFORG.x + _endOfsetX, legBaseFORG.y +_endOfsetY, legBaseFORG.z);
 
-            İnverseKinematicsForEndJoint();
+            İnverseKinematicsForLegBase();
 
-            UpdateLegBaseFCCP();
+            ForwardKinematicsForLegBase();
         }
-
-        public void MoveLegBasePoint(float _endOfsetX, float _endOfsetY, float _endOfsetZ)
-        {
-            float endOfsetX = 0;
-            float endOfsetY = 0;
-
-            if (_endOfsetY != 0)
-            {
-                endOfsetX = -Mathf.Sin(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetY;
-
-                endOfsetY = Mathf.Cos(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetY;
-            }
-            else if (_endOfsetX != 0)
-            {
-
-                endOfsetX = Mathf.Cos(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetX;
-
-                endOfsetY = Mathf.Sin(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetX;
-            }
-
-
-            legBaseFORG = new MyVector3(legBaseFORG.x + endOfsetX, legBaseFORG.y + endOfsetY, legBaseFORG.z + _endOfsetZ);
-        }
-
-        public void MoveLeg(Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.forward:
-                    MoveLegBasePoint(0, 1, 0);
-                    break;
-                case Direction.back:
-                    MoveLegBasePoint(0, -1, 0);
-                    break;
-                case Direction.up:
-                    MoveLegBasePoint(0, 0, 0.2f);
-                    break;
-                case Direction.down:
-                    MoveLegBasePoint(0, 0, -0.2f);
-                    break;
-                case Direction.left:
-                    MoveLegBasePoint(-1, 0, 0);
-                    break;
-                case Direction.right:
-                    MoveLegBasePoint(+1, 0, 0);
-                    break;
-                case Direction.none:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public void UpdateLegBaseFORG(float ofsetZ)
-        {
-            MyQuaternion rotation = new MyQuaternion();
-            rotation.EulertoQuaternion(new MyVector3(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x, legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z + ofsetZ));
-
-            MyMatrix4x4 T = new MyMatrix4x4();
-
-            T.Rotate(rotation);
-
-            MyVector4 alphaPosForOrigin = GetAlphaPosForOrigin();
-
-            T.m03 = alphaPosForOrigin.x;
-            T.m13 = alphaPosForOrigin.y;
-            T.m23 = alphaPosForOrigin.z;
-            
-            MyVector4 trans = T * new MyVector4(legBaseFCCP.x, legBaseFCCP.y, legBaseFCCP.z, 1.0f);
-
-            legBaseFORG = new MyVector3(trans.x, trans.y, legBaseFORG.z);
-        }
-
-        public void UpdateLegBaseFCCP()
+        
+        // Bu fonksiyon ile her bir bacak tabanın pozisyon bilgisi bacağın ana kordinat sistemine göre Q1,Q2 ve Q3 açıları ile güncellenmesini sağlar.
+        public void ForwardKinematicsForLegBase()
         {
             float Q1 = alphaAngleRad;
             float Q2 = betaAngleRad;
@@ -208,46 +143,55 @@ namespace Assets.code
             legBaseFCCP = new MyVector3(px, py, pz);
         }
 
-        private MyVector4 GetAlphaPosForOrigin()
+        // Bu fonksiyon ile bacağın ana koordinat sistemine göre bacak tabanın pozisyonu için gerekli  Q1,Q2 ve Q3 deperleri bulunur
+        private void İnverseKinematicsForLegBase()
         {
 
-            MyQuaternion rotation = new MyQuaternion();
-            rotation.EulertoQuaternion(new MyVector3(Parameters.bodyLocalEulerAngles.x, Parameters.bodyLocalEulerAngles.y, Parameters.bodyLocalEulerAngles.z));
-
-            MyMatrix4x4 T = new MyMatrix4x4();
-
-            T.Rotate(rotation);
-
-            T.m03 = Parameters.bodyLocalPosition.x;
-            T.m13 = Parameters.bodyLocalPosition.y;
-            T.m23 = Parameters.bodyLocalPosition.z;
-
-            MyVector4 k = T * new MyVector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
-
-            return T * new MyVector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
-        }
-
-        private void İnverseKinematicsForEndJoint()
-        {
-
+            // ilk olarak dönme matrisi oluşturuluyor. Bacağın ana kordinat sisteminin orijine göre x , y ve z eksenlerinde dönme açıları hesaplanıyor
             MyQuaternion rotation = new MyQuaternion();
             rotation.EulertoQuaternion(new MyVector3(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x,
-            legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z));
+                    legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z));
 
+            // birim dönüşüm matrisi oluşturuluyor
             MyMatrix4x4 T = new MyMatrix4x4();
 
+            // dönüşüm matirisi oluşturulan dönme matrisi ile döndürülüyor
             T.Rotate(rotation);
 
+            // bacağın ana kordinat sisteminin pozisyon değeri orijine göre okunuyor
             MyVector4 alphaPosForOrigin = GetAlphaPosForOrigin();
 
+            // dönüşüm matrisine pozisyon değerleride girilerek, dönüşüm matrisi tamamlanıyor
             T.m03 = alphaPosForOrigin.x;
             T.m13 = alphaPosForOrigin.y;
             T.m23 = alphaPosForOrigin.z;
 
+            /*
+             *  bacağın ana eksenine M, origine O diyelim.   
+             *  bacak tabanının origine göre pozisyonu Op, bacağın ana eksenine göre pozisyonuna Mp diyelim  
+             *                                                                      O                                    
+             *   Dolayısıyla T dönüşüm matrisi O nun M ye göre durumunu tutuar       T   dir   
+             *                                                                      M  
+             *           O 
+             *   Op =     T * Mp dir.
+             *           M 
+             *           
+             *   Biz Mp yi bulmak istediğimiz için dönüşüm matrisinin tersini alıyoruz.
+             *   
+             *   
+             *           M 
+             *   Mp =     T * Op dir.
+             *           O 
+             *   
+             */
+
             T.Inverse();
 
+            // bacağın ana eksenine göre pozisyonu aşağıdaki çarpım işlemi ile bulunuyor
             MyVector4 P = T * new MyVector4(legBaseFORG.x, legBaseFORG.y, legBaseFORG.z, 1.0f);
 
+            // ters kinematik denklemleri kullanılarak alpha beta gama açı değerleri hesaplanıyor.
+            // kinematik denklemlerin çıkartılma şekli dokumantosyan adlı dosyadaki ppt açıklandı. Hesaplamalarda D-H tablosu kullanılıyor
             alphaAngleRad = Mathf.Atan2(P.y, P.x);
 
             float K = P.x * Mathf.Cos(alphaAngleRad) - Parameters.coxia + P.y * Mathf.Sin(alphaAngleRad);
@@ -289,9 +233,107 @@ namespace Assets.code
             }
         }
 
+        // Bu fonkisyon ile bacağın ana ekseninin ( bacağın gövdeye bağlandığı yerdeki eksen) origine göre pozisyon bilgsi okunuyor
+        private MyVector4 GetAlphaPosForOrigin()
+        {
+            // gövdenin origine göre dönüş matrisi oluşturuluyor
+            MyQuaternion rotation = new MyQuaternion();
+            rotation.EulertoQuaternion(new MyVector3(Parameters.bodyLocalEulerAngles.x, Parameters.bodyLocalEulerAngles.y, Parameters.bodyLocalEulerAngles.z));
+
+            // birim dönüşüm matrisi oluşturuluyor
+            MyMatrix4x4 T = new MyMatrix4x4();
+
+            // döünüşüm matirisi dönme matrisi ile döndürülüyor
+            T.Rotate(rotation);
+
+            // dönüşüm matrisine robot gövdesinin origine göre konum değerleri giriliyor
+            T.m03 = Parameters.bodyLocalPosition.x;
+            T.m13 = Parameters.bodyLocalPosition.y;
+            T.m23 = Parameters.bodyLocalPosition.z;
+
+            // bacağın ana ekseninin pozisyon değeri gövde deki kordinat sistemi için hesaplanıyor     
+
+            return T * new MyVector4(legCCP.x, legCCP.y, legCCP.z, 1.0f);
+        }
+
+        public void UpdateLegBaseFORG(float ofsetZ)
+        {
+            MyQuaternion rotation = new MyQuaternion();
+            rotation.EulertoQuaternion(new MyVector3(legLocalEulerAngles.x + Parameters.bodyLocalEulerAngles.x, legLocalEulerAngles.y + Parameters.bodyLocalEulerAngles.y, legLocalEulerAngles.z + Parameters.bodyLocalEulerAngles.z + ofsetZ));
+
+            MyMatrix4x4 T = new MyMatrix4x4();
+
+            T.Rotate(rotation);
+
+            MyVector4 alphaPosForOrigin = GetAlphaPosForOrigin();
+
+            T.m03 = alphaPosForOrigin.x;
+            T.m13 = alphaPosForOrigin.y;
+            T.m23 = alphaPosForOrigin.z;
+
+            MyVector4 trans = T * new MyVector4(legBaseFCCP.x, legBaseFCCP.y, legBaseFCCP.z, 1.0f);
+
+            legBaseFORG = new MyVector3(trans.x, trans.y, legBaseFORG.z);
+        }
+
+        // Bu fonkisyon ile bacak tabanı pozisyonu ofset değerleri kadar hareket ettirilir.
+        public void MoveLegBasePoint(float _endOfsetX, float _endOfsetY, float _endOfsetZ)
+        {
+            float endOfsetX = 0;
+            float endOfsetY = 0;
+
+            if (_endOfsetY != 0)
+            {
+                endOfsetX = -Mathf.Sin(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetY;
+
+                endOfsetY = Mathf.Cos(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetY;
+            }
+            else if (_endOfsetX != 0)
+            {
+
+                endOfsetX = Mathf.Cos(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetX;
+
+                endOfsetY = Mathf.Sin(Mathf.PI * Parameters.bodyLocalEulerAngles.z / 180) * _endOfsetX;
+            }
+
+            legBaseFORG = new MyVector3(legBaseFORG.x + endOfsetX, legBaseFORG.y + endOfsetY, legBaseFORG.z + _endOfsetZ);
+        }
+
+        // Bu fonksiyon ile bacak tabanı noktası istenilen yönlerde sahip olduğu birim hareket kabiliyeti kadar hareket eder.
+        public void MoveDirLegBasePoint(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.forward:
+                    MoveLegBasePoint(0, 1, 0);
+                    break;
+                case Direction.back:
+                    MoveLegBasePoint(0, -1, 0);
+                    break;
+                case Direction.up:
+                    MoveLegBasePoint(0, 0, 0.2f);
+                    break;
+                case Direction.down:
+                    MoveLegBasePoint(0, 0, -0.2f);
+                    break;
+                case Direction.left:
+                    MoveLegBasePoint(-1, 0, 0);
+                    break;
+                case Direction.right:
+                    MoveLegBasePoint(+1, 0, 0);
+                    break;
+                case Direction.none:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Bu fonksiyon ile alpha beta ve gama açıları ile ilgili objeler hareket ettirliyor
         public void Update()
         {
-            İnverseKinematicsForEndJoint();
+            // açı değerleri ters kinematik ile hesaplanıyor
+            İnverseKinematicsForLegBase();
 
             float alphaAngleDeg = (alphaAngleRad * Mathf.Rad2Deg) % 360;
             float betaAngleDeg = -(betaAngleRad * Mathf.Rad2Deg) % 360;
