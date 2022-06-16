@@ -5,7 +5,7 @@
             <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/rotation1.gif" width="500" height="300"/></td>
         </tr>
         <tr>
-            <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/dance.gif" width="500" height="300"/></td>
+            <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/dancered.gif" width="500" height="300"/></td>
             <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/coordinate system.gif" width="500" height="300"/></td>
         </tr>
         
