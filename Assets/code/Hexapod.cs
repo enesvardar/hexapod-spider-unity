@@ -68,54 +68,58 @@ namespace Assets.code
             };
         }
 
-        public void MoveHexapodBodyDir(float ofset, Direction dir)
+        // Bu fonkisyon robotun gövdesini hareket ettirmek için kullanılır.
+        public void MoveHexapodBodyDir(float step, Direction dir)
         {
-            float x = 0;
-            float y = 0;
+            float stepX = 0;
+            float stepY = 0;
 
+            // gövedenin bulunduğu rotation bilgisini ve hareket ettirmilken isteninlen yöne göre x ve y eksenlerinde gidilecek step değerleri hesaplanıyor 
             if (dir == Direction.back || dir == Direction.forward)
             {
                 if (dir == Direction.back)
                 {
-                    ofset *= -1;
+                    step *= -1;
                 }
 
-                x = -Mathf.Sin(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * ofset;
+                stepX = -Mathf.Sin(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * step;
 
-                y = Mathf.Cos(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * ofset;
+                stepY = Mathf.Cos(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * step;
             }
             else if (dir == Direction.right || dir == Direction.left)
             {
                 if (dir == Direction.left)
                 {
-                    ofset *= -1;
+                    step *= -1;
                 }
 
-                x = Mathf.Cos(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * ofset;
+                stepX = Mathf.Cos(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * step;
 
-                y = Mathf.Sin(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * ofset;
+                stepY = Mathf.Sin(Mathf.PI * hexapod.transform.localEulerAngles.z / 180) * step;
             }
 
-            hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + x, hexapod.transform.localPosition.y + y, hexapod.transform.localPosition.z);
+            hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + stepX, hexapod.transform.localPosition.y + stepY, hexapod.transform.localPosition.z);
             
-            Parameters.bodyLocalPosition = new MyVector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z);
+            Parameters.bodyLocalPosition = new MyVector3(Parameters.bodyLocalPosition.x + stepX, Parameters.bodyLocalPosition.y + stepY, Parameters.bodyLocalPosition.z);
         }
 
-        public void MoveHexapodBodyXYZ(float x, float y, float z)
+        // Bu fonksiyon robot gövdesini x y z ekseninde hareket ettirmek için kullanılır
+        public void MoveHexapodBodyXYZ(float stepX, float stepY, float stepZ)
         {
-            hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + x, hexapod.transform.localPosition.y + y, hexapod.transform.localPosition.z + z);
+            hexapod.transform.localPosition = new UnityEngine.Vector3(hexapod.transform.localPosition.x + stepX, hexapod.transform.localPosition.y + stepY, hexapod.transform.localPosition.z + stepZ);
 
-            Parameters.bodyLocalPosition = new MyVector3(Parameters.bodyLocalPosition.x + x, Parameters.bodyLocalPosition.y + y, Parameters.bodyLocalPosition.z + z);
+            Parameters.bodyLocalPosition = new MyVector3(Parameters.bodyLocalPosition.x + stepX, Parameters.bodyLocalPosition.y + stepY, Parameters.bodyLocalPosition.z + stepZ);
         }
 
-        public void RotateHexapodBodyXYZ(float x, float y, float z)
+        // Bu fonksiyon robot gövdesini x y z ekseninde döndürmek ettirmek için kullanılır
+        public void RotateHexapodBodyXYZ(float stepX, float stepY, float stepZ)
         {
-            hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(hexapod.transform.localEulerAngles.x + x, hexapod.transform.localEulerAngles.y + y, hexapod.transform.localEulerAngles.z + z);
+            hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(hexapod.transform.localEulerAngles.x + stepX, hexapod.transform.localEulerAngles.y + stepY, hexapod.transform.localEulerAngles.z + stepZ);
 
-            Parameters.bodyLocalEulerAngles = new MyVector3(Parameters.bodyLocalEulerAngles.x + x, Parameters.bodyLocalEulerAngles.y + y, Parameters.bodyLocalEulerAngles.z + z);
+            Parameters.bodyLocalEulerAngles = new MyVector3(Parameters.bodyLocalEulerAngles.x + stepX, Parameters.bodyLocalEulerAngles.y + stepY, Parameters.bodyLocalEulerAngles.z + stepZ);
         }
 
-
+        // BU fonksiyon ile gövde pozisyonu istenilen bir konuma set edilir
         public void SetLocalPositionHexapodBody(MyVector3 value)
         {
             hexapod.transform.localPosition = new UnityEngine.Vector3(value.x, value.y, value.z); 
@@ -123,6 +127,7 @@ namespace Assets.code
             Parameters.bodyLocalPosition = value;
         }
 
+        // BU fonksiyon ile gövde rotatini istenilen bir değere set edilir
         public void SetLocalEulerAnglesHexapodBody(MyVector3 value)
         {
             hexapod.transform.localRotation = UnityEngine.Quaternion.Euler(value.x, value.y, value.z);
