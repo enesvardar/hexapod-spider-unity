@@ -1,16 +1,8 @@
 # Hexapod Robot Simulator 
-<table border="1">
-        <tr>
-            <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/walkred.gif" width="500" height="300"/></td>
-            <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/rotation1.gif" width="500" height="300"/></td>
-        </tr>
-        <tr>
-            <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/dancered.gif" width="500" height="300"/></td>
-            <td><img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/coordinate system.gif" width="500" height="300"/></td>
-        </tr>
-        
-</table>
-
+<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/walkred.gif" width="500" height="300"/>
+<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/rotation1.gif" width="500" height="300"/>
+<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/dancered.gif" width="500" height="300"/>
+<img src="https://github.com/enesvardar/hexapod-spider/blob/main/images/coordinate system.gif" width="500" height="300"/>
 
 # Announcement
 
