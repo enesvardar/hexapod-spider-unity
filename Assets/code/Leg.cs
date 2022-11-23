@@ -345,6 +345,38 @@ namespace Assets.code
             float betaAngleDeg = -(betaAngleRad * Mathf.Rad2Deg) % 360;
             float gamaAngleDeg = -(gamaAngleRad * Mathf.Rad2Deg) % 360;
 
+            if (alphaAngleDeg < -180)
+            {
+                alphaAngleDeg += 360;
+            }
+            else if (alphaAngleDeg > +180)
+            {
+                alphaAngleDeg -= 360;
+            }
+
+            if (betaAngleDeg < -180)
+            {
+                betaAngleDeg += 360;
+            }
+            else if (betaAngleDeg > +180)
+            {
+                betaAngleDeg -= 360;
+            }
+
+            if (betaAngleDeg > 80)
+            {
+                betaAngleDeg = 80;
+            }
+
+            if (gamaAngleDeg < -180)
+            {
+                gamaAngleDeg += 360;
+            }
+            else if (gamaAngleDeg > +180)
+            {
+                gamaAngleDeg -= 360;
+            }
+
             if (alphaAngleDeg >= -360 && 360 > alphaAngleDeg &&
                 betaAngleDeg >= -360 && 360 > betaAngleDeg &&
                 gamaAngleDeg >= -360 && 360 > gamaAngleDeg)
