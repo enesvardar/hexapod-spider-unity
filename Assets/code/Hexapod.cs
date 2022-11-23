@@ -165,11 +165,11 @@ namespace Assets.code
 
             if (changePosY < (conditionY / 2))
             {
-                MoveLegGroup(group, 1, Direction.up);
+                MoveLegGroup(group, 5, Direction.up);
             }
             else
             {
-                MoveLegGroup(group, 1, Direction.down);
+                MoveLegGroup(group, 5, Direction.down);
             }
 
             MoveHexapodBodyDir(1, dir);
@@ -200,13 +200,13 @@ namespace Assets.code
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     break;
                 case WalkingStep.walking1:
-                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.firstly, 100);
+                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.firstly, 120);
                     stepWalk = done == true ? WalkingStep.walking2 : stepWalk;
                     if (done == true)
                         stepWalk = contFlag == false ? WalkingStep.stop : stepWalk;
                     break;
                 case WalkingStep.walking2:
-                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.secondly, 100);
+                    done = WalkingSpecialStep(dir, (int)LEG_GROUP.secondly, 120);
                     stepWalk = done == true ? WalkingStep.walking1 : stepWalk;
                     break;
                 case WalkingStep.stop:
@@ -360,6 +360,7 @@ namespace Assets.code
         }
         public void Update()
         {
+
             foreach (var joint in legs)
             {
                 joint.Update();
