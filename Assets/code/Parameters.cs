@@ -5,16 +5,16 @@ namespace Assets.code
     class Parameters
     {
 
-        public static float coxia = 53;
-        public static float tibiaX = 70.8f;
+        public static float coxia = 45;
+        public static float tibiaX = 90.8f;
         public static float tibiaH = 25;
         public static float femuarX = 0;
-        public static float femuarH = 92.00085f;
+        public static float femuarH = 131.00085f;
 
-        public static float endOfset = -10;
+        public static float endOfset = 0;
 
         public static MyVector3 bodyLocalEulerAngles = new MyVector3(0, 0, 0);
-        public static MyVector3 bodyLocalPosition = new MyVector3(0, 0, (femuarH + tibiaH)/2);
+        public static MyVector3 bodyLocalPosition = new MyVector3(0, 0, 110);
 
         public static float lenght = coxia + tibiaX + femuarX;
 
