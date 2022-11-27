@@ -1,4 +1,4 @@
-﻿using UnityEngine.UI;
+using UnityEngine.UI;
 
 namespace Assets.code
 {
@@ -73,7 +73,7 @@ namespace Assets.code
         {
             if (txScroolbarBuf != txScroolbar.value)
             {
-                float change = (txScroolbar.value - txScroolbarBuf) * 100 ;
+                float change = (txScroolbar.value - txScroolbarBuf) * 100;
                 tx = txScroolbar.value - 0.5f;
                 txText.text = "tx = " + tx.ToString();
                 Globals.hexapod.MoveHexapodBodyXYZ(change, 0, 0);
@@ -100,7 +100,7 @@ namespace Assets.code
 
             if (rxScroolbarBuf != rxScroolbar.value)
             {
-                float change = (rxScroolbar.value - rxScroolbarBuf)*80;
+                float change = (rxScroolbar.value - rxScroolbarBuf) * 80;
                 rx = rxScroolbar.value - 0.5f;
                 rxText.text = "rx = " + rx.ToString();
                 Globals.hexapod.RotateHexapodBodyXYZ(change, 0, 0);
