@@ -249,11 +249,11 @@ namespace Assets.code
 
             if (changeRotateZ <= condZ)
             {
-                MoveLegGroup(group, 4, Direction.up);
+                MoveLegGroup(group, 15, Direction.up);
             }
             else
             {
-                MoveLegGroup(group, 4, Direction.down);
+                MoveLegGroup(group, 15, Direction.down);
             }
 
             if (changeRotateZ ==  (2 * condZ))
